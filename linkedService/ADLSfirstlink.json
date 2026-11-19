@@ -1,0 +1,11 @@
+{
+	"name": "ADLSfirstlink",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://ramtobilemedicalproject.dfs.core.windows.net/"
+		}
+	}
+}

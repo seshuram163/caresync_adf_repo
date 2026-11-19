@@ -1,0 +1,15 @@
+{
+	"name": "adf-caresync12345",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b81eaef5-3ea9-4a20-b05e-6237ee69e9b7",
+		"tenantId": "2cb8ed52-1cb5-4016-a6b5-fa03bdb5cd46"
+	}
+}
