@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "SELECT table_id FROM ctrl.table_config WHERE table_id=@{pipeline().parameters.table_id}",
+							"value": "SELECT * FROM ctrl.table_config WHERE table_id=@{pipeline().parameters.table_id}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -28,11 +28,11 @@
 						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					},
-					"firstRowOnly": false
+					"firstRowOnly": true
 				}
 			},
 			{
-				"name": "Set start time",
+				"name": "set start time",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
@@ -43,7 +43,7 @@
 				"typeProperties": {
 					"variableName": "start_time",
 					"value": {
-						"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd_hh:mm:ss')",
+						"value": "@formatDateTime(utcNow(),'yyyy-MM-ss_hh:mm:ss')",
 						"type": "Expression"
 					}
 				}
@@ -53,13 +53,13 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "read table details",
+						"activity": "set start time",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "Set start time",
+						"activity": "read table details",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -77,7 +77,7 @@
 					"source": {
 						"type": "PostgreSqlV2Source",
 						"query": {
-							"value": "select * from PUBLIC.@{activity('read table details').output.valuesource_table_name}",
+							"value": "select * from PUBLIC.@{activity('read table details').output.firstRow.source_table_name}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00"
@@ -114,7 +114,7 @@
 						"parameters": {
 							"container": "landingbronze",
 							"folder": {
-								"value": "@concat(\n    activity('read table details').output.firstrow.source_system,\n    '/',\n    activity('read table details').output.firstrow.source_table_name,\n    '/',\n    variables('start_time')\n)\n      ",
+								"value": "@concat(\n    activity('read table details').output.firstRow.source_system,\n    '/',\n    activity('read table details').output.firstRow.source_table_name,\n    '/',\n    variables('start_time')\n)",
 								"type": "Expression"
 							}
 						}
